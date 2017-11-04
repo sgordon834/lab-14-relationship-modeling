@@ -45,7 +45,6 @@ describe('POST /api/v1/dogs', () => {
       })
       .then((res) => {
         expect(res.body.name).toBe('jammy');
-        // expect(res.body.profile).toBe('entertainer, world dominator');
         expect(res.body.breed).not.toBe(undefined);
         expect(res.body._id).not.toBe(undefined);
         expect(res.status).toBe(200);
