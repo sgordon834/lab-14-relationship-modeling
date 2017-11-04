@@ -13,23 +13,27 @@ dogSchema.pre('save', function(done){
   
   
   Breed.findById(this.breed)
-    .then( breed => {
-      if (! breed) {
-        let newBreed = new Breed({});
-        return newBreed.save();
+    .then( mutt => {
+      if (! mutt) {
+        let newMutt = new Breed({dog: this._id, breed: ''});
+        return newMutt.save();
       }   
-      else { return breed; }
+      else { return mutt; }
     })
-    .then( breed => this.breed = breed._id )
-    .then( () => done() )
+    .then( mutt => {
+      this.breed = mutt._id;
+      done();
+    })
     .catch(done);
 });
 
-dogSchema.pre('findOne', function(){
+dogSchema.pre('findOne', function(done){
   this.populate({
+
     path:'breed',
   });
+  done();
 });
 
 
-module.exports = mongoose.model('Dog', dogSchema);
+const Dog = module.exports = mongoose.model('Dog', dogSchema);
