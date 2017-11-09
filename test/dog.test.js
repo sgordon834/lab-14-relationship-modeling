@@ -6,9 +6,7 @@ const mongoose = require('mongoose');
 const expect = require('expect');
 
 process.env.DB_URL = 'mongodb://localhost:27017/dogs_dev';
-// url = 
 process.env.PORT = 5500;
-
 
 beforeAll(() => {
   require('../lib/_server').start(process.env.PORT);
@@ -28,7 +26,7 @@ describe('POST /api/v1/dogs', () => {
     return request
       .post('localhost:5500/api/v1/dogs')
       .send({name: 'happy'})
-      .then((res) => {
+      .then(res => {
         dogId = res.body._id;
         expect(res.body.name).toBe('happy');
         expect(res.body.breed).not.toBe(undefined);
@@ -40,10 +38,8 @@ describe('POST /api/v1/dogs', () => {
   test('it should create another new dog', () => {
     return request
       .post('localhost:5500/api/v1/dogs')
-      .send({
-        'name': 'jammy'
-      })
-      .then((res) => {
+      .send({'name': 'jammy'})
+      .then(res => {
         expect(res.body.name).toBe('jammy');
         expect(res.body.breed).not.toBe(undefined);
         expect(res.body._id).not.toBe(undefined);
@@ -57,8 +53,8 @@ describe('POST /api/v1/dogs', () => {
       .send('Hello World')
       .then(Promise.reject)
       .catch(res => {
-        expect(res.status).toEqual(500);//400
-        expect(res.message).toEqual('Internal Server Error');//Bad Request
+        expect(res.response.status).toEqual(500);//400
+        expect(res.response.text).toEqual('error creating dogs');//Bad Request
       });
   });
 
@@ -66,7 +62,7 @@ describe('POST /api/v1/dogs', () => {
 
 describe('GET /api/v1/dogs', () => {
 
-  test('it should return all costumes if no id is given', () => {
+  test('it should return all dogs if no id is given', () => {
     return request
       .get('localhost:5500/api/v1/dogs')
       .then(res => {
@@ -76,7 +72,7 @@ describe('GET /api/v1/dogs', () => {
       });
   });
 
-  test('it should get a single costume with id param', () => {
+  test('it should get a single dog with id param', () => {
     return request
       .get(`localhost:5500/api/v1/dogs/${dogId}`)
       .then(res => {
@@ -110,16 +106,16 @@ describe('PUT /api/v1/dogs/:id', () => {
       });
   });
 
-//   test('it should return a 400 when no body is provided', () => {
-//     return request
-//       .put(`localhost:5500/api/v1/dogs/${dogId}`)
-//       .send({})
-//       .then(Promise.reject)
-//       .catch(res => {
-//         expect(res.status).toEqual(400);
-//         expect(res.message).toEqual('Bad Request');
-//       });
-//   });
+  test('it should return a 400 when no body is provided', () => {
+    return request
+      .put(`localhost:5500/api/v1/dogs/${dogId}`)
+      .send({})
+      .then(Promise.reject)
+      .catch(res => {
+        expect(res.status).toEqual(400);
+        expect(res.message).toEqual('Bad Request');
+      });
+  });
 
   test('it should return a 404 when no body is provided', () => {
 

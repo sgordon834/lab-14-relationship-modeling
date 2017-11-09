@@ -13,13 +13,13 @@ dogSchema.pre('save', function(done){
   
   
   Breed.findById(this.breed)
-    // .then( mutt => {
-    //   if (! mutt) {
-    //     let newMutt = new Breed({dog: this._id, breed: ''});
-    //     return newMutt.save();
-    //   }   
-    //   else { return mutt; }
-    // })
+    .then( mutt => {
+      if (! mutt) {
+        let newMutt = new Breed({dog: this._id, breed: ''});
+        return newMutt.save();
+      }   
+      else { return mutt; }
+    })
     .then( mutt => {
       if (! mutt._id) {
         throw new Error('No Breed');

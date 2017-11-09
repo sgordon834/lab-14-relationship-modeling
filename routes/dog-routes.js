@@ -6,6 +6,13 @@ const Dog = require(__dirname + '/../models/dog');
 
 const dogRouter = module.exports = express.Router();
 
+dogRouter.post('/dogs', jsonParser, (req, res, next) => {
+  let newDog = new Dog(req.body);
+  newDog.save()
+    .then(data => res.send(data))
+    .catch(err => next({statusCode: 500, message: 'error creating dogs', error: err}));
+});
+
 dogRouter.get('/dogs', (req, res, next) => {
   let findObj = req.query || {};
   Dog.find(findObj)
@@ -19,17 +26,11 @@ dogRouter.get('/dogs/:id', (req, res, next) => {
     .catch(err => next({error: err}));
 });
 
-dogRouter.post('/dogs', jsonParser, (req, res, next) => {
-  let newDog = new Dog(req.body);
-  newDog.save()
-    .then(data => res.send(data))
-    .catch(err => next({statusCode: 500, message: 'error creating dogs', error: err}));
-});
 
 dogRouter.put('/dogs/:id', jsonParser, (req, res, next) => {
-  // if(!req.params.id || Object.keys(req.body).length === 0 ) {
-  //   next({statusCode:400, message: 'Bad Request'});
-  // }
+  if(!req.params.id || Object.keys(req.body).length === 0 ) {
+    next({statusCode:400, message: 'Bad Request'});
+  }
   delete req.body._id;
   Dog.findOneAndUpdate({_id: req.params.id}, req.body)
     .then(() => res.send('success!'))

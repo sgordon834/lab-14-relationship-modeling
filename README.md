@@ -3,7 +3,16 @@
 ## Description
 Uses relational properties to 'JOIN' two models/tables so user can view data queried from both tables into one table.
 
-## Use
+Make new breed: echo '{"breed":"pug"}' | http :3000/api/v1/breeds
+
+Make new owner with breed and id of newly created breed: echo '{"name":"bowser","breed":"59fe2e7b4bdabd449a5e5a28"}' | http :3000/api/v1/dogs
+
+Get dog and using dog id: http :3000/api/v1/dogs/59fe2f0b4bdabd449a5e5a29
+
+Will return dog populated with breed.
+
+
+## Results
 * Dog Model takes mandatory "name" and "breed" ObjectId
 * Breed uses string.
 
